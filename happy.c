@@ -116,6 +116,7 @@ static target_t *targets = NULL;
 static int dmode = 0;
 static int pmode = 0;
 static int cmode = 0;
+static int qmode = 0; //Should happy also try to measure google quic connection time
 static int smode = 0;
 static int skmode = 0;
 static int nqueries = 3;
@@ -1243,7 +1244,7 @@ main(int argc, char *argv[])
     char **usr_ports = NULL;
     char **ports = def_ports;
 
-    while ((c = getopt(argc, argv, "abcd:p:q:f:hmst:")) != -1) {
+    while ((c = getopt(argc, argv, "abced:p:q:f:hmst:")) != -1) {
 	switch (c) {
 	case 'a':
 	    dmode = 1;
@@ -1266,6 +1267,11 @@ main(int argc, char *argv[])
 		    exit(EXIT_FAILURE);
 		}
 	    }
+	    break;
+	//Google Quic extension
+	case 'e':
+	    qmode = 1;
+	    printf("Quic should be measured too in the future\n");
 	    break;
 	case 'p':
 	    if (! usr_ports) {
@@ -1312,7 +1318,7 @@ main(int argc, char *argv[])
 	case 'h':
 	default: /* '?' */
 	    fprintf(stderr,
-		    "Usage: %s [-a] [-b] [-c] [-p port] [-q nqueries] "
+		    "Usage: %s [-a] [-b] [-c] [-e] [-p port] [-q nqueries] "
 		    "[-t timeout] [-d delay ] [-f file] [-s] [-m] "
 		    "hostname...\n", progname);
 	    exit(EXIT_FAILURE);
@@ -1343,6 +1349,11 @@ main(int argc, char *argv[])
 	}
 	if (pmode) {
 	    pump(targets);
+	}
+	//Quic
+	if(qmode)
+	{
+		printf("Quic here\n");//TODO quic connection etablieren
 	}
 	lock(stdout);
 	if (dmode) {
