@@ -1,4 +1,4 @@
-/*test
+/*
  * happy.c --
  *
  * Copyright (c) 2013, Juergen Schoenwaelder, Jacobs University Bremen
