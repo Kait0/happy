@@ -65,6 +65,8 @@
 #include <arpa/nameser.h>
 #include <resolv.h>
 
+#include <curl/curl.h>
+
 static const char *progname = "happy";
 
 #ifndef NI_MAXHOST
@@ -1243,7 +1245,9 @@ main(int argc, char *argv[])
     char *def_ports[] = { "80", 0 };
     char **usr_ports = NULL;
     char **ports = def_ports;
-
+    
+    curl_global_init(CURL_GLOBAL_SSL);
+    
     while ((c = getopt(argc, argv, "abced:p:q:f:hmst:")) != -1) {
 	switch (c) {
 	case 'a':
@@ -1391,5 +1395,7 @@ main(int argc, char *argv[])
         (void) free(usr_ports);
     }
 
+    curl_global_cleanup();
+    
     return EXIT_SUCCESS;
 }

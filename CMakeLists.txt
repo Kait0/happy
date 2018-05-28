@@ -6,7 +6,11 @@ cmake_minimum_required(VERSION 2.6)
 project(happy C) 
 include(GNUInstallDirs)
 
+SET(GCC_COVERAGE_LINK_FLAGS    "-lcurl")
+
 add_executable(happy happy.c)
+
+SET( CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
 
 if(CMAKE_COMPILER_IS_GNUCC)
     add_definitions(--std=c99 -Wall -Werror)
