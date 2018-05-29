@@ -6,11 +6,9 @@ cmake_minimum_required(VERSION 2.6)
 project(happy C) 
 include(GNUInstallDirs)
 
-SET(GCC_COVERAGE_LINK_FLAGS    "-lcurl")
-
+link_directories("/usr/lib/x86_64-linux-gnu")
 add_executable(happy happy.c)
-
-SET( CMAKE_C_FLAGS  "${CMAKE_C_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}" )
+target_link_libraries(happy curl)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     add_definitions(--std=c99 -Wall -Werror)

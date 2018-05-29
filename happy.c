@@ -1245,7 +1245,7 @@ main(int argc, char *argv[])
     char *def_ports[] = { "80", 0 };
     char **usr_ports = NULL;
     char **ports = def_ports;
-    
+
     curl_global_init(CURL_GLOBAL_SSL);
     
     while ((c = getopt(argc, argv, "abced:p:q:f:hmst:")) != -1) {
