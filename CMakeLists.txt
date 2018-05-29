@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 2.6)
 project(happy C) 
 include(GNUInstallDirs)
 
-link_directories("/usr/lib/x86_64-linux-gnu")
+link_directories("/usr/local/lib")
 add_executable(happy happy.c)
 target_link_libraries(happy curl)
 

@@ -1247,6 +1247,19 @@ main(int argc, char *argv[])
     char **ports = def_ports;
 
     curl_global_init(CURL_GLOBAL_SSL);
+    CURL *curl;
+    curl = curl_easy_init();
+    if(curl)
+    {
+        CURLcode res;
+        curl_easy_setopt(curl, CURLOPT_URL, "https://www.google.com");
+        curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);  /*Set the TLS version CURL_SSLVERSION_TLSv1_3 is the newest*/
+        res = curl_easy_perform(curl);
+        if(res)
+        {
+        }
+        curl_easy_cleanup(curl);
+    }
     
     while ((c = getopt(argc, argv, "abced:p:q:f:hmst:")) != -1) {
 	switch (c) {
