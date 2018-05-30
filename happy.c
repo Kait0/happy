@@ -1233,11 +1233,17 @@ pump(target_t *targets)
     }
 }
 
+
+size_t write_data(void *buffer, size_t size, size_t nmemb, void *userp)
+{
+    /*Since we are not interested in the response just do nothing here.*/
+    return size * nmemb;
+}
+
 /*
  * Here is where the fun starts. Parse the command line options and
  * run the program in the requested mode.
  */
-
 int
 main(int argc, char *argv[])
 {
@@ -1254,9 +1260,34 @@ main(int argc, char *argv[])
         CURLcode res;
         curl_easy_setopt(curl, CURLOPT_URL, "https://www.google.com");
         curl_easy_setopt(curl, CURLOPT_SSLVERSION, CURL_SSLVERSION_TLSv1_2);  /*Set the TLS version CURL_SSLVERSION_TLSv1_3 is the newest*/
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data); 
         res = curl_easy_perform(curl);
-        if(res)
+        if(res == CURLE_OK)
         {
+            double connect_dns, connect_tcp, connect_tls;
+            res = curl_easy_getinfo(curl, CURLINFO_NAMELOOKUP_TIME, &connect_dns);
+            if(CURLE_OK == res) 
+            {
+                printf("\nTime it takes to do DNS: %.6f s\n", connect_dns);
+                res = curl_easy_getinfo(curl, CURLINFO_CONNECT_TIME, &connect_tcp);
+                if(CURLE_OK == res) 
+                {
+                    printf("\nTime it takes to do only TCP: %.6f s\n", connect_tcp - connect_dns);
+                    res = curl_easy_getinfo(curl, CURLINFO_APPCONNECT_TIME, &connect_tls);
+                    if(CURLE_OK == res) 
+                    {
+                        printf("\nTime it takes to do TCP + TLS: %.6f s\n", connect_tls - connect_dns);
+                    }
+                }
+            }
+            else
+            {
+                printf("\nUnsupported option.\n");
+            }
+        }
+        else
+        {
+            printf("Couldn't connect to google :( \n");
         }
         curl_easy_cleanup(curl);
     }
